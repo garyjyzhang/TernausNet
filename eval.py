@@ -88,4 +88,4 @@ if __name__ == "__main__":
             mask = F.sigmoid(model(input_img))
             mask_array = mask.data[0].cpu().numpy()[0]
             mask_array = crop_image(mask_array, pads)
-            cv2.imwrite(os.path.join(config.output_dir, file.replace('.jpg', 'png')), mask_array)
+            cv2.imwrite(os.path.join(config.output_dir, file.replace('.jpg', '.png')), mask_array)
