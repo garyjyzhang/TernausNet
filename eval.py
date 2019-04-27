@@ -88,4 +88,5 @@ if __name__ == "__main__":
                 mask = torch.sigmoid(model(input_img))
                 mask_array = mask.data[0].cpu().numpy()[0]
                 mask_array = crop_image(mask_array, pads)
+                print(mask_array.sum())
                 cv2.imwrite(os.path.join(config.output_dir, file.replace('.jpg', '.png')), mask_array)
