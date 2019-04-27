@@ -82,6 +82,7 @@ if __name__ == "__main__":
     model = get_model()
     for file in os.listdir(config.input_dir):
         if file.endswith('.jpg'):
+            print(file)
             img, pads = load_image(os.path.join(config.input_dir, file), pad=True)
         with torch.no_grad():
             input_img = torch.unsqueeze(img_transform(img).to(device), dim=0)
