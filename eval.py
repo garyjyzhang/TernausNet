@@ -3,18 +3,17 @@ import argparse
 import os
 
 import torch
-from torch import nn
 from unet_models import unet11
-from pathlib import Path
-from torch.nn import functional as F
 from torchvision.transforms import ToTensor, Normalize, Compose
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 
 def get_model():
     model = unet11(pretrained='carvana')
     model.eval()
     return model.to(device)
+
 
 def load_image(path, pad=True):
     """
@@ -84,9 +83,9 @@ if __name__ == "__main__":
         if file.endswith('.jpg'):
             print(file)
             img, pads = load_image(os.path.join(config.input_dir, file), pad=True)
-        with torch.no_grad():
-            input_img = torch.unsqueeze(img_transform(img).to(device), dim=0)
-            mask = F.sigmoid(model(input_img))
-            mask_array = mask.data[0].cpu().numpy()[0]
-            mask_array = crop_image(mask_array, pads)
-            cv2.imwrite(os.path.join(config.output_dir, file.replace('.jpg', '.png')), mask_array)
+            with torch.no_grad():
+                input_img = torch.unsqueeze(img_transform(img).to(device), dim=0)
+                mask = torch.sigmoid(model(input_img))
+                mask_array = mask.data[0].cpu().numpy()[0]
+                mask_array = crop_image(mask_array, pads)
+                cv2.imwrite(os.path.join(config.output_dir, file.replace('.jpg', '.png')), mask_array)
